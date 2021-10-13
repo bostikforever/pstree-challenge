@@ -59,20 +59,26 @@ class Cursor:
 
     This should output:
     ..
-    Hello   
+    Hello
         * World
-        * Hello * 
+        * Hello *
         *       * World
     ..
     """
 
+    '''
+    why not
+    def __init__(self, offset: int=0, marker: Optional[_Marker] = None):
+
+    instead of the three methods below?
+    '''
     def __init__(self):
         self._init_cursor(0, None)
 
-    def _init_cursor(self, offset: int, markers: Optional[_Marker]):
-        assert markers is None or markers.offset <= offset
+    def _init_cursor(self, offset: int, marker: Optional[_Marker]):
+        assert marker is None or marker.offset <= offset
         self._offset = offset
-        self._markers = markers
+        self._marker = marker
 
     @classmethod
     def _create_cursor(cls, offset: int, markers: Optional[_Marker]) -> Cursor:
@@ -89,7 +95,7 @@ class Cursor:
         for string in strings:
             print(string, end="")
             accum_len += len(string)
-        return Cursor._create_cursor(self._offset + accum_len, self._markers)
+        return Cursor._create_cursor(self._offset + accum_len, self._marker)
 
     def add_marker(self, character) -> Cursor:
         """
@@ -98,13 +104,14 @@ class Cursor:
         and the returned 'Cursor' is not advanced.  The behaviour is undefined unless
         character is a single character string.
         """
-        assert not self._markers or self._markers.offset <= self._offset
-        new_markers = _Marker(self._offset, character, self._markers)
-        return Cursor._create_cursor(new_markers.offset, new_markers)
+        assert not self._marker or self._marker.offset <= self._offset
+        # renamed this because I was trained to use plural only for collections :)
+        new_marker = _Marker(self._offset, character, self._marker)
+        return Cursor._create_cursor(new_marker.offset, new_marker)
 
     def _accumulate_markers_and_offset(self) -> Iterable[str]:
         reversed_segments = []
-        marker = self._markers
+        marker = self._marker
         position = self._offset
         while marker is not None:
             reversed_segments.append(" " * (position - marker.offset - 1))
