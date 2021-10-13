@@ -47,11 +47,11 @@ class Cursor:
     - - - - - - - - - - - - - - - - - - -
     ..
     c = Cursor()
-    d = c.print("Hello ").add_marker("*").print(" ")
+    d = c.print("Hello ").add_marker("*").print("  ")
     d.advance_line()
     d.print("World")
     d.advance_line()
-    e = d.print("Hello ").add_marker("*").print(" ")
+    e = d.print("Hello ").add_marker("*").print("* ")
     e.advance_line()
     e.print("World")
     print()
@@ -59,17 +59,17 @@ class Cursor:
 
     This should output:
     ..
-    Hello *
-          * World
-          * Hello *
-          *       * World
+    Hello   
+        * World
+        * Hello * 
+        *       * World
     ..
     """
 
     def __init__(self, offset: Optional[int] = None, markers: Optional[_Marker] = None):
         if offset is None:
             offset = 0
-        assert markers is None or markers.offset < offset
+        assert markers is None or markers.offset <= offset
         self._offset = offset
         self._markers = markers
 
@@ -81,10 +81,9 @@ class Cursor:
         return Cursor(self._offset + accum_len, self._markers)
 
     def add_marker(self, character) -> Cursor:
-        assert not self._markers or self._markers.offset < self._offset
-        print(character, end="")
+        assert not self._markers or self._markers.offset <= self._offset
         new_markers = _Marker(self._offset, character, self._markers)
-        return Cursor(new_markers.offset + 1, new_markers)
+        return Cursor(new_markers.offset, new_markers)
 
     def _accumulate_markers_and_offset(self) -> Iterable[str]:
         reversed_segments = []

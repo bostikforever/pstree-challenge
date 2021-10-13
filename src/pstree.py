@@ -24,12 +24,15 @@ def print_child_prefix(cursor: Cursor, index: int, size: int) -> Cursor:
     if _is_first(index, size) and _is_last(index, size):
         cursor = cursor.print("--")
     elif _is_first(index, size):
-        cursor = cursor.print("-+")
+        cursor = cursor.print("-")
+        cursor = cursor.add_marker("|")
+        cursor = cursor.print("+")
     elif _is_last(index, size):
         cursor = cursor.print(" `")
     else:
         cursor = cursor.print(" ")
         cursor = cursor.add_marker("|")
+        cursor = cursor.print("|")
     cursor = cursor.print("-")
     return cursor
 
