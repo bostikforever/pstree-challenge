@@ -10,12 +10,16 @@ from typing import Optional
 
 def build_process_tree(process: Process) -> Tree:
     child_processes = filter(lambda x: x != process, process.children())
+    # to interleave the processing, make this a generator instead?
+    # so there will be no need to build the tree till it is printed.
     sub_trees = [build_process_tree(p) for p in child_processes]
     try:
         process_name = process.name()
     except psutil.ZombieProcess:
         process_name = "**Zombie**"
     process_label = f"{process_name} : {process.pid}"
+    # above idea is constrained by this interface, you are spreading the argument
+    # so the generator will iterative over the subtrees here
     return Tree(process_label, *sub_trees)
 
 
