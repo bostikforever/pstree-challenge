@@ -15,11 +15,11 @@ def hellow_world_cursor_test_1():
 
 def hello_world_cursor_test_2():
     c = Cursor()
-    d = c.print("Hello ").add_marker("*").print(" ")
+    d = c.print("Hello ").add_marker("*").print("  ")
     d.advance_line()
     d.print("World")
     d.advance_line()
-    e = d.print("Hello ").add_marker("*").print(" ")
+    e = d.print("Hello ").add_marker("*").print("* ")
     e.advance_line()
     e.print("World")
     print()
