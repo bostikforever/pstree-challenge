@@ -21,7 +21,6 @@ def print_child_prefix(cursor: Cursor, index: int, size: int) -> Cursor:
     """
     if not _is_first(index, size):
         cursor.advance_line()
-    # added the newline because when I was glancing through, though it was one if construct
 
     if _is_first(index, size) and _is_last(index, size):
         cursor = cursor.print("--")
