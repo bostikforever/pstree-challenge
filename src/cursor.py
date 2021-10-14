@@ -60,9 +60,9 @@ class Cursor:
     This should output:
     ..
     Hello   
-        * World
-        * Hello * 
-        *       * World
+          * World
+          * Hello * 
+          *       * World
     ..
     """
 
