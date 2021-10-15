@@ -63,3 +63,7 @@ def print_tree(
     if cursor is None:
         cursor = Cursor()
     _print_tree(tree, cursor, stream=stream)
+
+
+# basic character map for tree representation that can be used with transpose
+BASIC_CHAR_MAP = {"|": "-", "-": "|"}

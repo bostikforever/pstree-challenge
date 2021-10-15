@@ -33,5 +33,19 @@ def pstree_demo():
     print()
 
 
+def ps_tree_demo_vertical():
+    import io
+
+    stream = io.StringIO()
+    pstree.print_tree(EXAMPLE_TREE, stream=stream)
+    import transpose
+
+    vertical_lines = transpose.transpose(
+        stream.getvalue(), char_map=pstree.BASIC_CHAR_MAP
+    )
+    print(*vertical_lines, sep="\n")
+
+
 if __name__ == "__main__":
-    pstree_demo()
+    # pstree_demo()
+    ps_tree_demo_vertical()
