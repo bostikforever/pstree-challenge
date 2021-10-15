@@ -25,6 +25,29 @@ def hello_world_cursor_test_2():
     print()
 
 
+def hello_world_cursor_stream_test():
+    import io
+
+    string_stream = io.StringIO()
+    c = Cursor()
+    d = (
+        c.print("Hello ", stream=string_stream)
+        .add_marker("*")
+        .print("  ", stream=string_stream)
+    )
+    d.advance_line(stream=string_stream)
+    d.print("World", stream=string_stream)
+    d.advance_line(stream=string_stream)
+    e = (
+        d.print("Hello ", stream=string_stream)
+        .add_marker("*")
+        .print("* ", stream=string_stream)
+    )
+    e.advance_line(stream=string_stream)
+    e.print("World", stream=string_stream)
+    print(string_stream.getvalue())
+
+
 from pstree import print_child_prefix
 
 
@@ -106,4 +129,5 @@ def tree_cursor_test():
 if __name__ == "__main__":
     hello_world_cursor_test_1()
     hello_world_cursor_test_2()
+    hello_world_cursor_stream_test()
     tree_cursor_test()

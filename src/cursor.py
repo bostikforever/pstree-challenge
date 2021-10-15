@@ -1,4 +1,5 @@
 from __future__ import annotations
+import io
 
 from typing import Iterable, Optional
 
@@ -80,22 +81,23 @@ class Cursor:
         new_cursor._init_cursor(offset, markers)
         return new_cursor
 
-    def print(self, *strings) -> Cursor:
+    def print(self, *strings, stream: Optional[io.TextIOBase] = None) -> Cursor:
         """
-        Print the specified 'strings' to screen, returning a new 'Cursor' object that
-        repesents the current object after advancement by the total length of 'strings'.
+        Print the specified 'strings' to the specified 'stream' if provided, or standard
+        output otherwise, returning a new 'Cursor' object that repesents the current
+        object after advancement by the total length of 'strings'.
         """
         accum_len = 0
         for string in strings:
-            print(string, end="")
+            print(string, end="", file=stream)
             accum_len += len(string)
         return Cursor._create_cursor(self._offset + accum_len, self._markers)
 
     def add_marker(self, character) -> Cursor:
         """
         Return a new 'Cursor' object with the marker specified by 'character' added at
-        the current offset.  Note that this call does not print 'character' to screen
-        and the returned 'Cursor' is not advanced.  The behaviour is undefined unless
+        the current offset.  Note that this call does not actually print 'character' and
+        the returned 'Cursor' is not advanced.  The behaviour is undefined unless
         character is a single character string.
         """
         assert not self._markers or self._markers.offset <= self._offset
@@ -114,12 +116,13 @@ class Cursor:
         reversed_segments.append(" " * position)
         return reversed(reversed_segments)
 
-    def advance_line(self):
+    def advance_line(self, *, stream: Optional[io.TextIOBase] = None):
         """
         Print a new line followed by whitespace and any markers in the current object,
-        up until the position represented by this 'Cursor' object.  This method provides
-        a way to "initiailze" a new line to begin printing at the position represented
-        by this object while printing any stored line markings that should occur before
-        the position.
+        up until the position represented by this 'Cursor' object to the specified
+        'stream' if provided, or standard output otherwide.  This method provides a way
+        to "initiailze" a new line to begin printing at the position represented by this
+        object while printing any stored line markings that should occur before the
+        position.
         """
-        print("\n", *self._accumulate_markers_and_offset(), sep="", end="")
+        print("\n", *self._accumulate_markers_and_offset(), sep="", end="", file=stream)
