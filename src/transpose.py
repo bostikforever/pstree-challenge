@@ -44,7 +44,7 @@ class Line:
         return _join(iter(self), 0)
 
     def __repr__(self) -> str:
-        return str(self)
+        return f'Line({repr(self._base)}, {self._begin}, {self._begin + self._length})'
 
 
 def split_lines(string: str, *, delimiter="\n") -> Iterable[Iterable[str]]:
